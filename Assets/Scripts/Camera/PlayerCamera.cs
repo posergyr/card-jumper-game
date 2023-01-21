@@ -1,5 +1,4 @@
 using System;
-using Managers;
 using ScriptableSource;
 using UnityEngine;
 
@@ -41,7 +40,9 @@ namespace Camera
         private bool _toggleAccelerate;
 
         private Vector3 _currentVelocity = Vector3.zero;
-        [SerializeField] private Vector3 offset = new(0, 11.00f, -6.50f);
+        [Space]
+        [SerializeField] private Vector3 offset = new(0.00f, 0.00f, 0.00f);
+        [SerializeField] private Vector3 defaultRotation;
         
         // --- Input activation
         private void OnEnable()
@@ -146,7 +147,7 @@ namespace Camera
         }
         
         private void ResetCamera() => _transform.rotation 
-            = Quaternion.AngleAxis(-60, Vector3.left);
+            = Quaternion.AngleAxis(defaultRotation.x, Vector3.left);
 
         private void AccelerationUp() => _toggleAccelerate = false;
         private void AccelerationDown() => _toggleAccelerate = true;

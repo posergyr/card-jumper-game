@@ -1,11 +1,10 @@
 using Camera;
-using Managers;
 using ScriptableSource;
 using UnityEngine;
 
 namespace Behaviors
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class Movement : MonoBehaviour
     { 
         [SerializeField] private InputManager inputManager;
@@ -14,7 +13,7 @@ namespace Behaviors
         [Space] [SerializeField] private float runSpeed = 10.00f;
         [SerializeField] private float smoothMovement = 0.25f;
         
-        private Rigidbody _rigidbody;
+        private Rigidbody2D _rigidbody2d;
         private PlayerCamera _playerCamera;
         
         private Vector2 _refVector;
@@ -47,7 +46,7 @@ namespace Behaviors
 
         private void Start()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody2d = GetComponent<Rigidbody2D>();
         }
 
         private void FixedUpdate()
@@ -66,7 +65,7 @@ namespace Behaviors
                     _inputVector, ref _refVector, smoothMovement);
 
                 _movement = new Vector3(_currentInputVector.x, 0, _currentInputVector.y);
-                _rigidbody.MovePosition(movementFormula);
+                _rigidbody2d.MovePosition(movementFormula);
             }
         }
         
