@@ -5,18 +5,24 @@ using UnityEngine;
 namespace Behaviors
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class ArrowLogic : MonoBehaviour
+    public class ProjectileLogic : MonoBehaviour
     {
         private Rigidbody2D _rigidbody2d;
 
         private float _statsDamageArrow;
-        private readonly float _speed = 50.00f;
+        private bool _turnedRight;
         
+        private readonly float _speed = 50.00f;
         [SerializeField] private float lifeTime = 2.00f;
 
         public float StatsDamageArrow
         {
             set => _statsDamageArrow = value;
+        }
+
+        public bool TurnedRight
+        {
+            set => _turnedRight = value;
         }
 
         private void Start()
@@ -26,8 +32,8 @@ namespace Behaviors
 
         private void Update()
         {
-            var vector = new Vector3(1, 0, 0);
             var deltaSpeed = _speed * Time.fixedDeltaTime;
+            var vector = _turnedRight ? new Vector3(-1f, 0, 0) : new Vector3(1f, 0, 0);
 
             _rigidbody2d.MovePosition(transform.position + vector * deltaSpeed);
 

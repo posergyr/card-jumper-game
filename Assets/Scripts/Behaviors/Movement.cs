@@ -1,3 +1,4 @@
+using System;
 using Camera;
 using ScriptableSource;
 using UnityEngine;
@@ -6,23 +7,32 @@ namespace Behaviors
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class Movement : MonoBehaviour
-    { 
+    {
+        #region Characteristics
         [SerializeField] private InputManager inputManager;
-        
-        [Space] [SerializeField] private float defaultSpeed = 15.00f;
-        [Space] [SerializeField] private float runSpeed = 25.00f;
-        [SerializeField] private float smoothMovement = 0.25f;
-        
-        private Rigidbody2D _rigidbody2d;
+        [Space] 
+        [SerializeField] private float defaultMaxSpeed = 15.00f;
+        [SerializeField] private float runMaxSpeed = 25.00f;
+        [Space] 
+        [SerializeField] private float acceleration = 1f;
+        [SerializeField] private float deceleration = 1f;
+        [SerializeField] private float velocityPower = 0.45f;
+        [SerializeField] private float frictionAmount = 0.55f;
+        #endregion
+
+        private Rigidbody2D _rigidbody2D;
         private PlayerCamera _playerCamera;
         
-        private Vector2 _refVector;
         private Vector2 _inputVector;
-        private Vector3 _currentInputVector;
-        private Vector3 _movement;
-        
+
         private bool _toggleInput;
         private bool _toggleAccelerate;
+
+        public float InputVectorX
+        {
+            get => _inputVector.x;
+            private set => _inputVector.x = value;
+        }
 
         private void OnEnable()
         {
@@ -46,33 +56,51 @@ namespace Behaviors
 
         private void Start()
         {
-            _rigidbody2d = GetComponent<Rigidbody2D>();
+            _rigidbody2D = GetComponent<Rigidbody2D>();
         }
 
         private void FixedUpdate()
         {
             SmoothMovement();
+            FlipPlayer();
         }
 
         private void SmoothMovement()
         {
             if (inputManager.cameraModeFlag)
             {
-                var playerSpeed = _toggleAccelerate ? runSpeed : defaultSpeed;
-                var movementFormula = transform.forward + _movement * (playerSpeed * Time.fixedDeltaTime);
-                var velocity = _rigidbody2d.velocity;
+                var playerSpeed = _toggleAccelerate ? runMaxSpeed : defaultMaxSpeed;
+                var targetSpeed = _inputVector.x * playerSpeed;
                 
-                _currentInputVector = Vector2.SmoothDamp(_currentInputVector,
-                    _inputVector, ref _refVector, smoothMovement);
-                _movement = new Vector3(_currentInputVector.x, _currentInputVector.y, 0);
-                
-                velocity = new Vector2(velocity.x + movementFormula.x, 
-                    velocity.y + movementFormula.y);
-                
-                _rigidbody2d.velocity = velocity;
+                var speedDif = targetSpeed - _rigidbody2D.velocity.x;
+                var accelerate = (Mathf.Abs (targetSpeed) > 0.01f) ? acceleration : deceleration;
+                var movement = Mathf.Pow(Mathf .Abs (speedDif) * accelerate, velocityPower) * Mathf. Sign (speedDif);
+
+                if (Math.Abs(_inputVector.x) < 0.01f)
+                {
+                    var amount = Mathf.Min(Mathf.Abs(_rigidbody2D.velocity.x), Math.Abs(frictionAmount));
+                    amount *= Mathf .Sign (_rigidbody2D.velocity.x);
+                    _rigidbody2D.AddForce (Vector2.right * -amount, ForceMode2D. Impulse);
+                }
+
+                _rigidbody2D.AddForce (movement * Vector2.right) ;
             }
         }
-        
+
+        private void FlipPlayer()
+        {
+            if (_inputVector.x < 0)
+            {
+                InputVectorX = _inputVector.x;
+                transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            else if (_inputVector.x > 0)
+            {
+                InputVectorX = _inputVector.x;
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+        }
+
         // ------------- Event listeners -------------
 
         private void AxesMovement(Vector2 context) => _inputVector = context;
