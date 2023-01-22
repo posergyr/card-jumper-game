@@ -1,15 +1,18 @@
-using Managers;
+using System.Collections;
+using Interfaces;
 using UnityEngine;
 
 namespace Behaviors
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class ArrowLogic : MonoBehaviour
     {
-        private Rigidbody _rigidbody;
+        private Rigidbody2D _rigidbody2d;
 
         private float _statsDamageArrow;
         private readonly float _speed = 50.00f;
+        
+        [SerializeField] private float lifeTime = 2.00f;
 
         public float StatsDamageArrow
         {
@@ -18,24 +21,32 @@ namespace Behaviors
 
         private void Start()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody2d = GetComponent<Rigidbody2D>();
         }
 
         private void Update()
         {
-            var vector = new Vector3(0, 0, 1);
+            var vector = new Vector3(1, 0, 0);
             var deltaSpeed = _speed * Time.fixedDeltaTime;
-            
-            _rigidbody.MovePosition(transform.position + vector * deltaSpeed);
+
+            _rigidbody2d.MovePosition(transform.position + vector * deltaSpeed);
+
+            if (gameObject.activeSelf)
+                StartCoroutine(WaitAndDestroy(lifeTime));
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.CompareTag($"Enemy"))
-                other.gameObject.GetComponent<HealthManager>().DecreaseHealth(_statsDamageArrow);
-
+            if (other.TryGetComponent(out IDamageable damageable))
+                damageable.Damage(_statsDamageArrow);
+            
             gameObject.SetActive(false);
         }
 
+        private IEnumerator WaitAndDestroy(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            gameObject.SetActive(false);
+        }
     }
 }

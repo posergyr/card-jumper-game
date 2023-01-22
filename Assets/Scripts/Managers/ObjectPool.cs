@@ -31,12 +31,10 @@ namespace Managers
 
         public GameObject GetPooledObject()
         {
-            for (var i = 0; i < _pooledObjects.Count; i++)
+            foreach (var objectInPool in _pooledObjects)
             {
-                if (!_pooledObjects[i].activeInHierarchy)
-                {
-                    return _pooledObjects[i];
-                }
+                if (!objectInPool.activeInHierarchy)
+                    return objectInPool;
             }
 
             return null;

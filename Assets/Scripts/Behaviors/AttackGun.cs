@@ -9,8 +9,10 @@ namespace Behaviors
     {
         [SerializeField] private InputManager inputManager;
         [SerializeField] private WeaponStats stats;
-        
+
         private GameObject _bullet;
+        
+        private float _arrowLogic;
         private bool _upgraded;
         
         private void OnEnable()
@@ -22,19 +24,18 @@ namespace Behaviors
         {
             inputManager.ShootTheArrow -= ShootTheArrow;
         }
-        
+
         private void ShootTheArrow()
         {
             _bullet = ObjectPool.instance.GetPooledObject();
 
             if (_bullet != null)
             {
-                var stockDamage = _bullet.gameObject.GetComponent<ArrowLogic>().
-                    StatsDamageArrow = stats.UpgradeDamageArrow;
-                var upgradedDamage = _bullet.gameObject.GetComponent<ArrowLogic>().
-                    StatsDamageArrow = stats.StockDamageArrow;
+                var stockDamage = stats.UpgradeDamageArrow;
+                var upgradedDamage = stats.StockDamageArrow;
+                var vectorForward = new Vector3(2.5f, 0, 0);
 
-                _bullet.transform.position = transform.position + new Vector3(0, 1.50f, 0);
+                _bullet.transform.position = transform.position + vectorForward;
                 _bullet.SetActive(true);
                 
                 _bullet.gameObject.GetComponent<ArrowLogic>().StatsDamageArrow 

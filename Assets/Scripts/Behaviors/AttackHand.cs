@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Behavior
+namespace Behaviors
 {
     public class NewBehaviourScript : MonoBehaviour
     {

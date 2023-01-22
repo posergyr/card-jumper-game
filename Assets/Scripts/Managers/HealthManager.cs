@@ -1,10 +1,10 @@
-using Behaviors;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Managers
 {
-    public class HealthManager : MonoBehaviour
+    public class HealthManager : MonoBehaviour, IDamageable
     {
         [SerializeField] private float healthMax = 100.00f;
         private float _currentHealth;
@@ -31,8 +31,9 @@ namespace Managers
             healthBarSprite.fillAmount = _currentHealth / healthMax;
         }
 
-        public void DecreaseHealth(float amount)
+        public void Damage(float amount)
         {
+            Debug.Log("OUCH!");
             _currentHealth -= amount;
         }
 
