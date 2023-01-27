@@ -6,16 +6,15 @@ using Vector3 = UnityEngine.Vector3;
 namespace Behaviors
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class AttackGun : MonoBehaviour
+    [RequireComponent(typeof(Movement))]
+    public class Weapon : MonoBehaviour
     {
         [SerializeField] private InputManager inputManager;
         [SerializeField] private WeaponStats stats;
-
+        
         private GameObject _projectile;
         private Movement _movement;
-        private Rigidbody2D _rigidbody2D;
         
-        private float _objectVelocity;
         private Vector3 _offset;
 
         private bool _turnedRight;
@@ -33,14 +32,16 @@ namespace Behaviors
 
         private void Start()
         {
-            _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
             _movement = gameObject.GetComponent<Movement>();
         }
 
         private void Update()
         {
-            _objectVelocity = _rigidbody2D.velocity.x;
+            OffsetFlip();
+        }
 
+        private void OffsetFlip()
+        {
             if (_movement.InputVectorX < 0)
             {
                 _offset = new Vector3(-2.00f, 0.00f, 0.00f);

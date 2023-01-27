@@ -2,6 +2,7 @@ using Behaviors;
 using Managers;
 using UnityEngine;
 using ScriptableSource;
+using UnityEngine.Serialization;
 
 namespace Interaction
 {
@@ -9,7 +10,7 @@ namespace Interaction
     {
         [SerializeField] private InputManager inputManager;
         [SerializeField] private Wallet playersWallet;
-        [SerializeField] private AttackGun attackGun;
+        [FormerlySerializedAs("attackGun")] [SerializeField] private Weapon weapon;
 
         private void OnEnable()
         {
@@ -26,7 +27,7 @@ namespace Interaction
             if (playersWallet.CurrencyGold >= 1000.00f)
             {
                 playersWallet.DeleteGold(1000.00f);
-                attackGun.StatsModifier();
+                weapon.StatsModifier();
             }
             else
                 Debug.Log("Not enough money!");

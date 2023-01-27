@@ -1,5 +1,4 @@
 using System;
-using Camera;
 using ScriptableSource;
 using UnityEngine;
 
@@ -21,10 +20,8 @@ namespace Behaviors
         #endregion
 
         private Rigidbody2D _rigidbody2D;
-        private PlayerCamera _playerCamera;
-        
-        private Vector2 _inputVector;
 
+        private Vector2 _inputVector;
         private bool _toggleInput;
         private bool _toggleAccelerate;
 

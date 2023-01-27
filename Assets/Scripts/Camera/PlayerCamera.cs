@@ -79,7 +79,7 @@ namespace Camera
             ResetCamera(); // resetting camera on changing mode to 3rd person
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             CameraSelection();
         }

@@ -32,6 +32,11 @@ namespace Behaviors
 
         private void Update()
         {
+            ProjectileMovement();
+        }
+
+        private void ProjectileMovement()
+        {
             var deltaSpeed = _speed * Time.fixedDeltaTime;
             var vector = _turnedRight ? new Vector3(-1f, 0, 0) : new Vector3(1f, 0, 0);
 
