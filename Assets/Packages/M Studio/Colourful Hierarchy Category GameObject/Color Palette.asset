@@ -14,17 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorDesigns:
   - keyChar: /
-    textColor: {r: 0.8962264, g: 0.7873323, b: 0.5453453, a: 1}
-    backgroundColor: {r: 0.3679245, g: 0.31181023, b: 0.1995817, a: 1}
-    textAlignment: 4
-    fontStyle: 1
-  - keyChar: //
-    textColor: {r: 0.71084017, g: 0.8050078, b: 0.9245283, a: 1}
-    backgroundColor: {r: 0.2012282, g: 0.29926193, b: 0.3584906, a: 1}
-    textAlignment: 4
-    fontStyle: 1
-  - keyChar: ///
-    textColor: {r: 0.8179756, g: 0.6734603, b: 0.8867924, a: 1}
-    backgroundColor: {r: 0.25282258, g: 0.15619439, b: 0.2830189, a: 1}
-    textAlignment: 4
+    textColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+    backgroundColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
+    textAlignment: 3
     fontStyle: 1

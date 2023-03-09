@@ -12,13 +12,8 @@ namespace Camera
         [SerializeField] private InputManager inputManager;
         [SerializeField] private Transform cameraTarget;
         private Transform _transform;
-        
-        [Space] 
-        
-        // --- Camera characteristics for tweaking later
-        [SerializeField] private float speedDefault = 10.00f;
-        [SerializeField] private float acceleration = 50.00f;
-        [SerializeField] private float mouseSensitivity = 25.00f;
+
+        [Header("Player camera settings")]
         [SerializeField] private float smoothMovement = 0.25f;
         
         private bool _cameraPlayerMode = true;  // Private variable of camera mode:
@@ -40,9 +35,14 @@ namespace Camera
         private bool _toggleAccelerate;
 
         private Vector3 _currentVelocity = Vector3.zero;
-        [Space]
         [SerializeField] private Vector3 offset = new(0.00f, 0.00f, 0.00f);
         [SerializeField] private Vector3 defaultRotation;
+        
+        [Header("Cheat camera settings")]
+        // --- Camera characteristics for tweaking
+        [SerializeField] private float speedDefault = 10.00f;
+        [SerializeField] private float acceleration = 50.00f;
+        [SerializeField] private float mouseSensitivity = 25.00f;
         
         // --- Input activation
         private void OnEnable()
@@ -110,14 +110,14 @@ namespace Camera
                 var camSpeed = _toggleAccelerate ? acceleration : speedDefault;
                 var localRotation = Quaternion.AngleAxis(_rotationX, Vector3.up);
 
-                _rotationX += _cameraDeltaInputX * Time.deltaTime * mouseSensitivity;
-                _rotationY += _cameraDeltaInputY * Time.deltaTime * mouseSensitivity;
+                _rotationX += _cameraDeltaInputX * Time.smoothDeltaTime * mouseSensitivity;
+                _rotationY += _cameraDeltaInputY * Time.smoothDeltaTime * mouseSensitivity;
                 _rotationY = Math.Clamp(_rotationY, -90, 90);
 
                 localRotation *= Quaternion.AngleAxis(_rotationY, Vector3.left);
 
-                _movementX = _cameraMovementInputX * (camSpeed * Time.deltaTime);
-                _movementY = _cameraMovementInputY * (camSpeed * Time.deltaTime);
+                _movementX = _cameraMovementInputX * (camSpeed * Time.smoothDeltaTime);
+                _movementY = _cameraMovementInputY * (camSpeed * Time.smoothDeltaTime);
 
                 _transform.Translate(_movementX, 0, _movementY);
                 _transform.localRotation = localRotation;
