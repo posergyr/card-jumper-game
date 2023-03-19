@@ -19,11 +19,14 @@ namespace Behaviors
         [SerializeField] private float frictionAmount = 0.55f;
         #endregion
 
+        #region VariablesIntroduction
         private Rigidbody2D _rigidbody2D;
-
         private Vector2 _inputVector;
+        
         private bool _toggleInput;
         private bool _toggleAccelerate;
+        private bool _facingRight;
+        #endregion
 
         public float InputVectorX
         {
@@ -59,7 +62,7 @@ namespace Behaviors
         private void FixedUpdate()
         {
             SmoothMovement();
-            FlipPlayer();
+            RotatePlayer();
         }
 
         private void SmoothMovement()
@@ -70,40 +73,50 @@ namespace Behaviors
                 var targetSpeed = _inputVector.x * playerSpeed;
                 
                 var speedDif = targetSpeed - _rigidbody2D.velocity.x;
-                var accelerate = (Mathf.Abs (targetSpeed) > 0.01f) ? acceleration : deceleration;
-                var movement = Mathf.Pow(Mathf .Abs (speedDif) * accelerate, velocityPower) * Mathf. Sign (speedDif);
+                var accelerate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : deceleration;
+                var movement = Mathf.Pow(Mathf.Abs (speedDif) * accelerate, velocityPower) 
+                               * Mathf.Sign(speedDif);
 
                 if (Math.Abs(_inputVector.x) < 0.01f)
                 {
                     var amount = Mathf.Min(Mathf.Abs(_rigidbody2D.velocity.x), Math.Abs(frictionAmount));
-                    amount *= Mathf .Sign (_rigidbody2D.velocity.x);
-                    _rigidbody2D.AddForce (Vector2.right * -amount, ForceMode2D. Impulse);
+                    amount *= Mathf.Sign(_rigidbody2D.velocity.x);
+                    _rigidbody2D.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
                 }
 
-                _rigidbody2D.AddForce (movement * Vector2.right) ;
+                _rigidbody2D.AddForce(movement * Time.deltaTime * Vector2.right);
             }
         }
 
-        private void FlipPlayer()
+        private void RotatePlayer()
         {
-            if (_inputVector.x < 0)
+            if (_inputVector.x < 0 && _facingRight)
             {
-                InputVectorX = _inputVector.x;
-                transform.eulerAngles = new Vector3(0, 180, 0);
+                Flip();
             }
-            else if (_inputVector.x > 0)
+            else if (_inputVector.x > 0 && !_facingRight)
             {
-                InputVectorX = _inputVector.x;
-                transform.eulerAngles = new Vector3(0, 0, 0);
+                Flip();
             }
         }
 
-        // ------------- Event listeners -------------
+        private void Flip()
+        {
+            var objectToFlip = gameObject;
+            var currentScale = objectToFlip.transform.localScale;
+            
+            currentScale.x *= -1;
+            objectToFlip.transform.localScale = currentScale;
 
+            _facingRight = !_facingRight;
+        }
+
+        #region EventListeners
         private void AxesMovement(Vector2 context) => _inputVector = context;
         private void MouseLocker() => inputManager.mouseCapturedFlag = true;
         private void MouseSetFree() => inputManager.mouseCapturedFlag = false;
         private void AccelerationUp() => _toggleAccelerate = false;
         private void AccelerationDown() => _toggleAccelerate = true;
+        #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace Interaction
         [SerializeField] private Wallet playersWallet;
         [FormerlySerializedAs("attackGun")] [SerializeField] private Weapon weapon;
 
-        private void OnEnable()
+        private void OnEnable ()
         {
             inputManager.BuyUpgrade += BuyUpgrade;
         }

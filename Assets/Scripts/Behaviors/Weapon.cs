@@ -77,6 +77,5 @@ namespace Behaviors
         {
             _upgraded = true;
         }
-        
     }
 }

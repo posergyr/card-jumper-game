@@ -39,10 +39,5 @@ namespace Managers
 
             return null;
         }
-
-        public void UpdatePool()
-        {
-            
-        }
     }
 }

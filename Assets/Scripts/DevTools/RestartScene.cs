@@ -29,9 +29,9 @@ namespace DevTools
             }
         }
         
-        // ------------- Event listeners -------------
-        
+        #region EventListeners
         private void ActionRestartUp() => _restart = false;
         private void ActionRestartDown() => _restart = true;
+        #endregion
     }
 }

@@ -20,7 +20,7 @@ namespace Camera
                                                 // if true -> standard 3rd person camera
                                                 // if false -> free camera for development
 
-        // --- Movement and coordinates fields
+        #region Movement fields
         private float _movementX;
         private float _movementY;
         private float _rotationX;
@@ -28,11 +28,12 @@ namespace Camera
         
         private float _cameraDeltaInputX;
         private float _cameraDeltaInputY;
-
         private float _cameraMovementInputX;
         private float _cameraMovementInputY;
         
         private bool _toggleAccelerate;
+        #endregion
+        
 
         private Vector3 _currentVelocity = Vector3.zero;
         [SerializeField] private Vector3 offset = new(0.00f, 0.00f, 0.00f);
@@ -145,11 +146,12 @@ namespace Camera
             
             ResetCamera();
         }
-        
+
+        #region EventListeners
         private void ResetCamera() => _transform.rotation 
             = Quaternion.AngleAxis(defaultRotation.x, Vector3.left);
-
         private void AccelerationUp() => _toggleAccelerate = false;
         private void AccelerationDown() => _toggleAccelerate = true;
+        #endregion
     }
 }
